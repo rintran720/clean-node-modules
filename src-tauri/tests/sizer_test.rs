@@ -25,3 +25,14 @@ fn missing_dir_is_zero() {
     let bogus = std::path::Path::new("/no/such/path/clean_nm_test");
     assert_eq!(dir_size(bogus), 0);
 }
+
+#[cfg(unix)]
+#[test]
+fn does_not_follow_symlinks() {
+    use std::os::unix::fs::symlink;
+    let dir = tempfile::tempdir().unwrap();
+    let target = tempfile::tempdir().unwrap();
+    std::fs::write(target.path().join("big.bin"), vec![0u8; 1000]).unwrap();
+    symlink(target.path(), dir.path().join("link")).unwrap();
+    assert_eq!(clean_node_modules_lib::sizer::dir_size(dir.path()), 0);
+}
