@@ -21,6 +21,20 @@ pub struct DeleteResult {
 }
 
 #[derive(Debug, Clone, Serialize)]
+pub struct DeleteProgress {
+    pub index: u64,
+    pub total: u64,
+    pub result: DeleteResult,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct DeleteStart {
+    pub index: u64,
+    pub total: u64,
+    pub path: PathBuf,
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct ScanProgress {
     pub projects_found: u64,
     pub total_size_bytes: u64,

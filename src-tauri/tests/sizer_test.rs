@@ -26,6 +26,16 @@ fn missing_dir_is_zero() {
     assert_eq!(dir_size(bogus), 0);
 }
 
+#[test]
+fn counts_hidden_subdirs() {
+    // pnpm stores actual deps under node_modules/.pnpm/ — must be counted.
+    let dir = tempdir().unwrap();
+    let pnpm = dir.path().join(".pnpm").join("foo@1.0.0").join("node_modules").join("foo");
+    fs::create_dir_all(&pnpm).unwrap();
+    fs::write(pnpm.join("index.js"), vec![0u8; 4096]).unwrap();
+    assert_eq!(dir_size(dir.path()), 4096);
+}
+
 #[cfg(unix)]
 #[test]
 fn does_not_follow_symlinks() {

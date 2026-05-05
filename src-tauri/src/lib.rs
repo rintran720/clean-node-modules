@@ -12,7 +12,7 @@ use tauri::{Emitter, State};
 use tauri_plugin_dialog::DialogExt;
 
 use crate::scanner::{scan_blocking, ScanCallbacks};
-use crate::types::{DeleteResult, ScanDone};
+use crate::types::{DeleteProgress, DeleteResult, DeleteStart, ScanDone};
 
 #[derive(Default)]
 struct AppState {
@@ -75,12 +75,44 @@ fn cancel_scan(state: State<'_, AppState>) {
     state.cancel.store(true, Ordering::Relaxed);
 }
 
-#[tauri::command]
-async fn delete_many(paths: Vec<String>) -> Result<Vec<DeleteResult>, String> {
+async fn run_delete<F>(
+    window: tauri::Window,
+    paths: Vec<String>,
+    one: F,
+) -> Result<Vec<DeleteResult>, String>
+where
+    F: Fn(&std::path::Path) -> DeleteResult + Send + Sync + 'static,
+{
     let paths: Vec<PathBuf> = paths.into_iter().map(PathBuf::from).collect();
-    tauri::async_runtime::spawn_blocking(move || crate::deleter::delete_many(paths))
-        .await
-        .map_err(|e| format!("delete task failed: {e}"))
+    let total = paths.len() as u64;
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut results = Vec::with_capacity(paths.len());
+        for (i, p) in paths.iter().enumerate() {
+            let _ = window.emit(
+                "delete:item-start",
+                DeleteStart { index: (i + 1) as u64, total, path: p.clone() },
+            );
+            let r = one(p);
+            let _ = window.emit(
+                "delete:progress",
+                DeleteProgress { index: (i + 1) as u64, total, result: r.clone() },
+            );
+            results.push(r);
+        }
+        results
+    })
+    .await
+    .map_err(|e| format!("delete task failed: {e}"))
+}
+
+#[tauri::command]
+async fn delete_many(window: tauri::Window, paths: Vec<String>) -> Result<Vec<DeleteResult>, String> {
+    run_delete(window, paths, crate::deleter::delete_one).await
+}
+
+#[tauri::command]
+async fn delete_many_permanent(window: tauri::Window, paths: Vec<String>) -> Result<Vec<DeleteResult>, String> {
+    run_delete(window, paths, crate::deleter::delete_one_permanent).await
 }
 
 pub fn run() {
@@ -91,7 +123,8 @@ pub fn run() {
             pick_root_folder,
             scan,
             cancel_scan,
-            delete_many
+            delete_many,
+            delete_many_permanent
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
