@@ -7,7 +7,36 @@
 </head>
 <body>
   <main id="app">
-    <h1>clean-node-modules</h1>
+    <header id="topbar">
+      <h1>clean-node-modules</h1>
+      <div id="status"></div>
+      <button id="cancel-btn" hidden>Cancel</button>
+    </header>
+
+    <section id="empty-state">
+      <p>Choose a folder to scan for <code>node_modules</code> directories.</p>
+      <button id="choose-btn">Choose folder…</button>
+    </section>
+
+    <section id="results" hidden>
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="select-all" /></th>
+            <th data-sort="path">Project</th>
+            <th data-sort="size">Size</th>
+            <th data-sort="project_modified">Project modified</th>
+            <th data-sort="nm_modified">node_modules modified</th>
+          </tr>
+        </thead>
+        <tbody id="results-body"></tbody>
+      </table>
+    </section>
+
+    <footer id="footer" hidden>
+      <span id="selection-summary">0 selected · 0 B</span>
+      <button id="delete-btn" disabled>Delete selected (move to Trash)</button>
+    </footer>
   </main>
   <script type="module" src="main.js"></script>
 </body>

@@ -1,1 +1,17 @@
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; color: #222; }
+#app { display: flex; flex-direction: column; height: 100vh; }
+#topbar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid #ddd; }
+#topbar h1 { font-size: 16px; margin: 0; }
+#status { flex: 1; color: #666; font-size: 13px; }
+#empty-state { padding: 40px; text-align: center; }
+#results { flex: 1; overflow: auto; padding: 0 16px; }
+#results-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+#results-table th, #results-table td { padding: 6px 8px; border-bottom: 1px solid #eee; text-align: left; }
+#results-table th[data-sort] { cursor: pointer; user-select: none; }
+#results-table th[data-sort].active::after { content: " ▾"; }
+#results-table th[data-sort].active.asc::after { content: " ▴"; }
+#footer { display: flex; gap: 12px; align-items: center; padding: 10px 16px; border-top: 1px solid #ddd; }
+#footer #selection-summary { flex: 1; color: #444; }
+button { padding: 6px 12px; cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: default; }
