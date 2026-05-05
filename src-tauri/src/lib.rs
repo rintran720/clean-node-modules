@@ -1,3 +1,4 @@
+pub mod deleter;
 pub mod mtime;
 pub mod scanner;
 pub mod sizer;
