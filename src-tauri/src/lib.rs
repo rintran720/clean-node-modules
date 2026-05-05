@@ -76,11 +76,11 @@ fn cancel_scan(state: State<'_, AppState>) {
 }
 
 #[tauri::command]
-async fn delete_many(paths: Vec<String>) -> Vec<DeleteResult> {
+async fn delete_many(paths: Vec<String>) -> Result<Vec<DeleteResult>, String> {
     let paths: Vec<PathBuf> = paths.into_iter().map(PathBuf::from).collect();
     tauri::async_runtime::spawn_blocking(move || crate::deleter::delete_many(paths))
         .await
-        .unwrap_or_default()
+        .map_err(|e| format!("delete task failed: {e}"))
 }
 
 pub fn run() {
