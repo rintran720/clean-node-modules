@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>clean-node-modules</title>
+  <title>Clean Node Modules</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main id="app">
     <header id="topbar">
-      <h1>clean-node-modules</h1>
+      <h1>Clean Node Modules</h1>
       <div id="status"></div>
+      <button id="new-scan-btn">New scan…</button>
       <button id="cancel-btn" hidden>Cancel</button>
     </header>
 
@@ -33,11 +34,35 @@
       </table>
     </section>
 
+    <section id="delete-progress" hidden>
+      <div class="dp-row">
+        <progress id="delete-progress-bar" value="0" max="1"></progress>
+        <span id="delete-progress-count">0 / 0</span>
+      </div>
+      <div id="delete-progress-path"></div>
+    </section>
+
     <footer id="footer" hidden>
       <span id="selection-summary">0 selected · 0 B</span>
-      <button id="delete-btn" disabled>Delete selected (move to Trash)</button>
+      <button id="delete-btn" disabled>Move to Trash</button>
+      <button id="delete-permanent-btn" class="danger" disabled>Delete permanently…</button>
     </footer>
   </main>
+
+  <dialog id="confirm-modal">
+    <form method="dialog">
+      <h2 id="confirm-title">Confirm</h2>
+      <p id="confirm-summary"></p>
+      <p id="confirm-warning" class="warn" hidden></p>
+      <label id="confirm-type-label" hidden>Type <code>DELETE</code> to confirm:
+        <input id="confirm-type-input" type="text" autocomplete="off" spellcheck="false" />
+      </label>
+      <div class="actions">
+        <button type="button" id="confirm-cancel">Cancel</button>
+        <button type="submit" id="confirm-ok" value="ok">Confirm</button>
+      </div>
+    </form>
+  </dialog>
   <script type="module" src="main.js"></script>
 </body>
 </html>
