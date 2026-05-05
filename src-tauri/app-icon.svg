@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="folder" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="folderTab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+    <linearGradient id="bristles" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
+      <feOffset dx="0" dy="10" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#bg)"/>
+
+  <g opacity="0.18" fill="#FFFFFF">
+    <circle cx="180" cy="220" r="6"/>
+    <circle cx="860" cy="180" r="8"/>
+    <circle cx="820" cy="820" r="5"/>
+    <circle cx="160" cy="780" r="7"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <path d="M 232 380
+             L 432 380
+             Q 452 380 462 396
+             L 492 436
+             L 772 436
+             Q 800 436 800 464
+             L 800 740
+             Q 800 768 772 768
+             L 232 768
+             Q 204 768 204 740
+             L 204 408
+             Q 204 380 232 380 Z"
+          fill="url(#folderTab)"/>
+    <path d="M 232 460
+             L 772 460
+             Q 800 460 800 488
+             L 800 740
+             Q 800 768 772 768
+             L 232 768
+             Q 204 768 204 740
+             L 204 488
+             Q 204 460 232 460 Z"
+          fill="url(#folder)"/>
+  </g>
+
+  <g transform="translate(560 220) rotate(35)" filter="url(#shadow)">
+    <rect x="-18" y="-180" width="36" height="320" rx="18" fill="#7C2D12"/>
+    <rect x="-18" y="-180" width="36" height="20" rx="10" fill="#451A03"/>
+
+    <path d="M -110 130
+             Q -130 150 -120 200
+             L 120 200
+             Q 130 150 110 130
+             Z"
+          fill="#92400E"/>
+
+    <g stroke="url(#bristles)" stroke-width="10" stroke-linecap="round">
+      <line x1="-100" y1="200" x2="-130" y2="320"/>
+      <line x1="-70"  y1="200" x2="-90"  y2="330"/>
+      <line x1="-40"  y1="200" x2="-50"  y2="335"/>
+      <line x1="-10"  y1="200" x2="-12"  y2="340"/>
+      <line x1="20"   y1="200" x2="28"   y2="338"/>
+      <line x1="50"   y1="200" x2="68"   y2="332"/>
+      <line x1="80"   y1="200" x2="108"  y2="322"/>
+      <line x1="105"  y1="200" x2="138"  y2="308"/>
+    </g>
+  </g>
+
+  <g fill="#FFFFFF" opacity="0.95">
+    <path d="M 360 600 l 8 -22 l 8 22 l 22 8 l -22 8 l -8 22 l -8 -22 l -22 -8 z"/>
+    <path d="M 470 660 l 6 -16 l 6 16 l 16 6 l -16 6 l -6 16 l -6 -16 l -16 -6 z"/>
+    <path d="M 280 690 l 5 -14 l 5 14 l 14 5 l -14 5 l -5 14 l -5 -14 l -14 -5 z"/>
+  </g>
+</svg>

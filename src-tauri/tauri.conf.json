@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "clean-node-modules",
+  "productName": "Clean Node Modules",
   "version": "0.1.0",
   "identifier": "dev.local.clean-node-modules",
   "build": {
@@ -11,13 +11,20 @@
   },
   "app": {
     "windows": [
-      { "label": "main", "title": "clean-node-modules", "width": 900, "height": 600 }
+      { "label": "main", "title": "Clean Node Modules", "width": 900, "height": 600 }
     ],
     "security": { "csp": null }
   },
   "bundle": {
     "active": true,
-    "targets": "all"
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
   },
   "plugins": {}
 }
