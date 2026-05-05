@@ -1,4 +1,5 @@
 pub mod mtime;
+pub mod scanner;
 pub mod sizer;
 pub mod types;
 
