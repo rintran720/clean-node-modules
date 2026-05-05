@@ -47,3 +47,23 @@ fn skips_dot_directories() {
     let v = collect(dir.path());
     assert!(v.is_empty(), "node_modules under .cache must be ignored");
 }
+
+#[test]
+fn respects_cancel_before_processing() {
+    let dir = tempdir().unwrap();
+    fs::create_dir_all(dir.path().join("a/node_modules")).unwrap();
+    fs::create_dir_all(dir.path().join("b/node_modules")).unwrap();
+
+    let cancel = Arc::new(std::sync::atomic::AtomicBool::new(true)); // cancelled up-front
+    let found = Arc::new(Mutex::new(Vec::<std::path::PathBuf>::new()));
+    let f2 = found.clone();
+    let cbs = ScanCallbacks {
+        on_project: Box::new(move |p| f2.lock().unwrap().push(p.node_modules_path.clone())),
+        on_progress: Box::new(|_| {}),
+        cancel,
+    };
+    let summary = scan_blocking(dir.path(), cbs);
+    assert!(summary.cancelled);
+    assert_eq!(summary.projects_found, 0);
+    assert!(found.lock().unwrap().is_empty());
+}
