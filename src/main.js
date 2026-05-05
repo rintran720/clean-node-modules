@@ -127,3 +127,39 @@ await listen("scan:done", (event) => {
     ? `Cancelled · ${d.total_projects} projects, ${fmtSize(d.total_size_bytes)}`
     : `Done · ${d.total_projects} projects, ${fmtSize(d.total_size_bytes)}`;
 });
+
+$("#delete-btn").addEventListener("click", async () => {
+  const sel = state.rows.filter((r) => state.selected.has(r.node_modules_path));
+  if (sel.length === 0) return;
+  const totalBytes = sel.reduce((s, r) => s + r.size_bytes, 0);
+  const ok = confirm(
+    `Move ${sel.length} node_modules folders (${fmtSize(totalBytes)}) to Trash?\n\n` +
+    `You can restore them from your OS trash, or run \`npm install\` to recreate them.`
+  );
+  if (!ok) return;
+
+  $("#delete-btn").disabled = true;
+  const paths = sel.map((r) => r.node_modules_path);
+
+  let results;
+  try {
+    results = await invoke("delete_many", { paths });
+  } catch (err) {
+    $("#status").textContent = `Delete failed: ${err}`;
+    $("#delete-btn").disabled = false;
+    return;
+  }
+
+  const okPaths = new Set(results.filter((r) => r.ok).map((r) => r.path));
+  state.rows = state.rows.filter((r) => !okPaths.has(r.node_modules_path));
+  okPaths.forEach((p) => state.selected.delete(p));
+
+  const failed = results.filter((r) => !r.ok);
+  if (failed.length === 0) {
+    $("#status").textContent = `Deleted ${results.length} folders.`;
+  } else {
+    $("#status").textContent = `Deleted ${results.length - failed.length}, ${failed.length} failed.`;
+    console.warn("Failed deletes:", failed);
+  }
+  render();
+});
